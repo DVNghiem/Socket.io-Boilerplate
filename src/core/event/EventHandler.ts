@@ -1,5 +1,4 @@
-import { Socket } from 'socket.io';
 
-export interface EventHandler {
-  handle(socket: Socket, ...args: any[]): void;
+export interface EventHandler<T extends any[]> {
+  handle(...args: T): void;
 }

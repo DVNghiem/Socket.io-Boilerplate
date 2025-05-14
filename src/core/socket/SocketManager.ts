@@ -51,11 +51,11 @@ export class SocketManager {
   private setupEvents() {
     this.io.on('connection', (socket: Socket) => {
       Logger.info(`New client connected: ${socket.id}`);
-      EventEmitter.emit('client:connect', socket);
+      EventEmitter.getInstance().emit('client:connect', socket);
 
       socket.on('disconnect', () => {
         Logger.info(`Client disconnected: ${socket.id}`);
-        EventEmitter.emit('client:disconnect', socket);
+        EventEmitter.getInstance().emit('client:disconnect', socket);
       });
     });
   }

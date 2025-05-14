@@ -21,4 +21,8 @@ export class Logger {
   public static error(message: string) {
     this.logger.error(message);
   }
+
+  public static debug(message: string) {
+    this.logger.debug(message);
+  }
 }
