@@ -27,7 +27,7 @@ This is a high-performance Socket.IO server template built with TypeScript, opti
 
 ## Project Structure
 ```
-socketio-template/
+Socket.io-Boilerplate/
 ├── src/
 │   ├── config/                     # Configuration files
 │   ├── core/                       # Core components (Socket.IO, events, strategies)
@@ -45,8 +45,8 @@ socketio-template/
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
-cd socketio-template
+git clone https://github.com/DVNghiem/Socket.io-Boilerplate
+cd Socket.io-Boilerplate
 ```
 
 ### 2. Install Dependencies
