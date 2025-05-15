@@ -52,7 +52,7 @@ export class EventEmitter {
   }
 
   public emit<K extends keyof EventMap>(event: K, ...args: EventMap[K]): void {
-    Logger.debug(`Emitting event ${String(event)} with args: ${JSON.stringify(args)}`);
+    Logger.info(`Emitting event ${String(event)} with args: ${args}`);
     this.emitter.emit(event, ...args);
   }
 
