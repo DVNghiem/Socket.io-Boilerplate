@@ -1,6 +1,7 @@
 import { EventEmitter as NodeEventEmitter } from 'events';
 import { Logger } from '../../utils/Logger';
 import { Socket } from 'socket.io';
+import { EventHandler } from './EventHandler';
 
 // Define event types and their argument shapes
 export interface EventMap {
@@ -10,9 +11,6 @@ export interface EventMap {
   // Add more events as needed
 }
 
-export interface EventHandler<T extends any[]> {
-  handle(...args: T): void;
-}
 
 export class EventEmitter {
   private static instance: EventEmitter;
