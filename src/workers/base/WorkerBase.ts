@@ -25,8 +25,17 @@ export abstract class WorkerBase {
 
   public async process(taskId: string, message: any, strategy: WorkerStrategy): Promise<void> {
     return new Promise((resolve, reject) => {
-      // Using require.resolve to get the path to WorkerThread via alias
-      const workerPath = require.resolve('@workers/WorkerThread');
+      let workerPath: string;
+
+      try {
+        // Try to resolve using alias first (development)
+        workerPath = require.resolve('@workers/WorkerThread');
+      } catch (error) {
+        // Fallback to relative path (production)
+        const path = require('path');
+        workerPath = path.join(__dirname, '../WorkerThread.js');
+        Logger.info(`Using fallback worker path: ${workerPath}`);
+      }
 
       const worker = new Worker(workerPath, {
         workerData: { taskId, message, strategy: strategy.name },

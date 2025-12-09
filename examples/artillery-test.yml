@@ -1,0 +1,84 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    # Phase 1: Warm up
+    - duration: 30
+      arrivalRate: 10
+      name: "Warm up - 10 users/sec"
+    
+    # Phase 2: Ramp up
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 100
+      name: "Ramp up - 10 to 100 users/sec"
+    
+    # Phase 3: Sustained load
+    - duration: 120
+      arrivalRate: 100
+      name: "Sustained load - 100 users/sec"
+    
+    # Phase 4: Spike test
+    - duration: 30
+      arrivalRate: 500
+      name: "Spike test - 500 users/sec"
+    
+    # Phase 5: Cool down
+    - duration: 30
+      arrivalRate: 10
+      name: "Cool down - 10 users/sec"
+  
+  socketio:
+    transports: ['websocket']
+    reconnection: true
+    reconnectionDelay: 1000
+    reconnectionAttempts: 3
+
+scenarios:
+  - name: 'Chat Room Scenario'
+    engine: socketio
+    flow:
+      # Connect and join room
+      - emit:
+          channel: 'join:room'
+          data: 'load-test-room'
+      
+      # Wait a bit
+      - think: 1
+      
+      # Send multiple messages
+      - loop:
+        - emit:
+            channel: 'chat:message'
+            data:
+              roomId: 'load-test-room'
+              content: 'Load test message {{ $randomString() }}'
+              user: 'LoadTestUser{{ $randomNumber(1, 1000) }}'
+              timestamp: '{{ $timestamp }}'
+        - think: 2
+        count: 5
+      
+      # Listen for responses
+      - think: 5
+
+  - name: 'Multiple Rooms Scenario'
+    engine: socketio
+    weight: 30
+    flow:
+      # Join multiple rooms
+      - emit:
+          channel: 'join:room'
+          data: 'room-{{ $randomNumber(1, 10) }}'
+      
+      - think: 1
+      
+      # Send messages to different rooms
+      - loop:
+        - emit:
+            channel: 'chat:message'
+            data:
+              roomId: 'room-{{ $randomNumber(1, 10) }}'
+              content: 'Multi-room test {{ $randomString() }}'
+              user: 'User{{ $randomNumber(1, 1000) }}'
+              timestamp: '{{ $timestamp }}'
+        - think: 3
+        count: 3
